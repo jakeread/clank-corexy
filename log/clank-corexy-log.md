@@ -238,6 +238,14 @@ Nearly done, ffs, this is an errand.
 
 - just get plates out, enough to send to folks, you're in controller town still 
 
+## 2022 09 20 
+
+I'm going to setup some new plates to print today, and just adapt the tool changer to future-proof for circuits. 
+
+My pogo pins have initial contact at 0.236" (6mm) from the pcb surface, and have 0.055" (1.4mm) of stroke, so I want the tool to be contacting at 5mm from the PCB surface... PCBs being 1.6mm thick, and I want 5mm final spacing (for 1mm of throw-s worth of pressure) I want the *bottom* of the toolchanger pcb to be... 5 + 1.6 * 2 = 8.2mm from the *back* of the tool. 
+
+The existing gap is (allegedly) 2.75mm, so I need to push a 5.45 (5.5) millimeter pocket into the existing face. 
+
 ### "Deploying"
 
 - should version the main assembly to a Fusion Version... that's "release" - ? and stash those are .f3z's ... 
