@@ -285,7 +285,7 @@ Roller Depth            20.5 (not centered!)
 
 ### Hardware Set
 
-- check check ? 
+- BOM is on clank.tools 
 
 ### Docu-Notes
 
