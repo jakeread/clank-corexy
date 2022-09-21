@@ -285,7 +285,11 @@ Roller Depth            20.5 (not centered!)
 
 ### Hardware Set
 
-?? wash CAD & check 
+- check check ? 
+
+### Docu-Notes
+
+- the "extract BOM" fusion default script actually... is good enough for this application... 
 
 ### Dev Notes
 
