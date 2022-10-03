@@ -277,7 +277,7 @@ Roller Length           82
 Roller Depth            20.5 (not centered!) 
 ```
 
-### CAD Delta Desires
+### CAD Delta Desires 
 
 - could rm M5x10 SHCS throughout and replace with FHCS, M5x14 SHCS, right? 
 - check / sweep for a hardware BOM and tighten up overall if it seems possible 

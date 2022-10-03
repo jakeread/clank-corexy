@@ -20,3 +20,5 @@ bom/*
 cad/archive/*
 *.ipynb_checkpoints
 cam/*
+**.3dm_temp
+**.stlbak
