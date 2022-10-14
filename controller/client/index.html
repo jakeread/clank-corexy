@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>axl-tool</title>
+    <!-- these three disable caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+</head>
+
+<body>
+    <link href="style.css" rel="stylesheet">
+    <script src="../osapjs/client/libs/jquery.min.js"></script>
+    <script src="../osapjs/client/libs/math.js" type="text/javascript"></script>
+    <script src="../osapjs/client/libs/d3.js"></script>
+    <script src="https://unpkg.com/gerber-to-svg@^4.0.0/dist/gerber-to-svg.min.js"></script>
+    <!-- multivariate polynomial regression w/ https://www.npmjs.com/package/regression-multivariate-polynomial via browserify -->
+    <script src="../osapjs/client/libs/poly.js"></script>
+    <!-- <script type="module" src="axlClient.js"></script> -->
+    <!-- <script type="module" src="clankiteClient.js"></script> -->
+    <!-- <script type="module" src="clankiteADSKClient.js"></script> -->
+    <script type="module" src="axlSplitClient.js"></script>
+
+    <div id="wrapper">
+    	<!-- bootloop puts first view inside of this div -->
+    </div>
+    <svg width="0" height="0" id="temp"></svg>
+
+</body>
+
+</html>

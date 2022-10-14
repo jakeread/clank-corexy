@@ -28,3 +28,6 @@
 [submodule "firmware/cxy-axl-stepper/src/utils_samd51"]
 	path = firmware/cxy-axl-stepper/src/utils_samd51
 	url = https://github.com/jakeread/utils_samd51.git
+[submodule "controller/osapjs"]
+	path = controller/osapjs
+	url = https://github.com/jakeread/osapjs.git
