@@ -18,154 +18,24 @@ VPort_ArduinoSerial vpUSBSer(&osap, "arduinoUSBSerial", &Serial);   // 0
 
 VBus_UCBusHead vbUCBusHead(&osap, "ucBusHead");                     // 1
 
-/*
-
-// -------------------------------------------------------- 2: States
-
-EP_ONDATA_RESPONSES onStateData(uint8_t* data, uint16_t len){
-  ERRLIGHT_TOGGLE;
-  // check for partner-config badness, 
-  if(len != AXL_NUM_DOF * 4 + 2){ OSAP::error("state req has bad DOF count"); return EP_ONDATA_REJECT; }
-  // we have accel, rate, posn data, 
-  dofs targ;
-  uint16_t rptr = 0;
-  uint8_t mode = data[rptr ++];
-  uint8_t set = data[rptr ++];
-  for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-    targ.axis[a] = ts_readFloat32(data, &rptr);
-  }
-  // set or target?
-  if(set){
-    switch(mode){
-      case AXL_MODE_POSITION:
-        if(axl_isMoving()){
-          OSAP::error("AXL can't set pos while moving");
-          break;
-        }
-        axl_setPosition(targ);
-        break;
-      default:
-        OSAP::error("we can only 'set' position, others are targs");
-        break;
-    }
-  } else {
-    switch(mode){
-      case AXL_MODE_ACCEL:
-        axl_setAccelTarget(targ);
-        break;
-      case AXL_MODE_VELOCITY:
-        axl_setVelocityTarget(targ);
-        break;
-      case AXL_MODE_POSITION:
-        axl_setPositionTarget(targ);
-        break;
-      default:
-        OSAP::error("AXL state targ has bad / unrecognized mode");
-        break;
-    }
-  }
-  // since we routinely update it w/ actual states (not requests) 
-  return EP_ONDATA_REJECT;
-}
-
-Endpoint statesEP(&osap, "states", onStateData);
-
-void updateStatesEP(void){
-  uint8_t numBytes = AXL_NUM_DOF * 4 * 3 + 2;
-  uint8_t stash[numBytes]; uint16_t wptr = 0;
-  stash[wptr ++] = axl_getMode();
-  axl_isMoving() ? stash[wptr ++] = 1 : stash[wptr ++] = 0;
-  dofs temp = axl_getPositions();
-  for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-    ts_writeFloat32(temp.axis[a], stash, &wptr);
-  }
-  temp = axl_getVelocities();
-  for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-    ts_writeFloat32(temp.axis[a], stash, &wptr);
-  }
-  temp = axl_getAccelerations();
-  for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-    ts_writeFloat32(temp.axis[a], stash, &wptr);
-  }
-  statesEP.write(stash, numBytes);
-}
-
-// -------------------------------------------------------- 3: Halt
-
-uint32_t haltLightOnTime = 0;
-
-EP_ONDATA_RESPONSES onHaltData(uint8_t* data, uint16_t len){
-  axl_halt();
-  ERRLIGHT_ON;
-  haltLightOnTime = millis();
-  return EP_ONDATA_REJECT;
-}
-
-Endpoint haltEP(&osap, "halt", onHaltData);
-
-// -------------------------------------------------------- 4: Moves -> Queue
-
-EP_ONDATA_RESPONSES onMoveData(uint8_t* data, uint16_t len){
-  // this (and states-input) could watch <len> to make sure that 
-  // this code & transmitter code are agreeing on how many DOFs are specd 
-  if(axl_hasQueueSpace()){
-    uint16_t rptr = 0;
-    float rate = ts_readFloat32(data, &rptr);
-    dofs targ;
-    for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-      targ.axis[a] = ts_readFloat32(data, &rptr);
-    }
-    axl_addMoveToQueue(targ, rate);
-    return EP_ONDATA_ACCEPT;
-  } else {
-    return EP_ONDATA_WAIT;
-  }
-}
-
-Endpoint moveEP(&osap, "moves", onMoveData);
-
-// -------------------------------------------------------- 5: AXL Settings
-
-EP_ONDATA_RESPONSES onAXLSettingsData(uint8_t* data, uint16_t len){
-  // jd, then pairs of accel & vel limits,
-  float jd;
-  dofs accelLimits;
-  dofs velLimits;
-  uint16_t rptr = 0;
-  jd = ts_readFloat32(data, &rptr);
-  for(uint8_t a = 0; a < AXL_NUM_DOF; a ++){
-    accelLimits.axis[a] = ts_readFloat32(data, &rptr);
-    velLimits.axis[a] = ts_readFloat32(data, &rptr);
-  }
-  axl_setJunctionDeviation(jd);
-  axl_setAccelLimits(accelLimits);
-  axl_setVelLimits(velLimits);
-  return EP_ONDATA_ACCEPT;
-}
-
-Endpoint axlSettingsEP(&osap, "axlSettings", onAXLSettingsData);
-
-*/
-
 // -------------------------------------------------------- POWER MODES 
 
-#define V5_ON PIN_HI(0, 11)
-#define V5_OFF PIN_LO(0, 11)
-#define V5_SETUP PIN_SETUP_OUTPUT(0, 11); PIN_LO(0, 11)
-#define V24_ON PIN_HI(0, 10)
-#define V24_OFF PIN_LO(0, 10)
-#define V24_SETUP PIN_SETUP_OUTPUT(0, 10); PIN_LO(0, 10)
+// 5v bus hi-side sw on PB23
+#define V5BUS_ON PIN_HI(1, 23)
+#define V5BUS_OFF PIN_LO(1, 23)
+#define V5BUS_SETUP PIN_SETUP_OUTPUT(1, 23); PIN_LO(1, 23)
 
-// 5V Switch on PA11, 24V Switch on PA10
-/*  5v  | 24v | legal 
-    0   | 0   | yes
-    1   | 0   | yes 
-    0   | 1   | no 
-    1   | 1   | yes 
+#define V24BUS_ON PIN_HI(1, 14)
+#define V24BUS_OFF PIN_LO(1, 14)
+#define V24BUS_SETUP PIN_SETUP_OUTPUT(1, 14); PIN_LO(1, 14)
 
-lol, pretty easy I guess: just no 24v when no 5v...
-we also want to turn on in-order though: 5v first, then 24v, and 24v off, then 5v 
-*/
+#define V5POGO_ON PIN_HI(1, 22)
+#define V5POGO_OFF PIN_LO(1, 22)
+#define V5POGO_SETUP PIN_SETUP_OUTPUT(1, 22); PIN_LO(1, 22)
+
+#define V24POGO_ON PIN_HI(1, 17)
+#define V24POGO_OFF PIN_LO(1, 17)
+#define V24POGO_SETUP PIN_SETUP_OUTPUT(1, 17); PIN_LO(1, 17)
 
 // track states 
 boolean state5V = false;
@@ -174,7 +44,7 @@ boolean state24V = false;
 void publishPowerStates(void);
 
 // make changes 
-void powerStateUpdate(boolean st5V, boolean st24V){
+void powerStateUpdate(boolean st5V, boolean st24V, boolean st5VPogo, boolean st24VPogo){
   // guard against bad state
   if(st24V && !st5V) st24V = false;
   // check order-of-flip... if 5v is turning off, we will turn 24v first, 
@@ -234,11 +104,13 @@ void setup() {
   DEBUG2PIN_SETUP;
   DEBUG3PIN_SETUP;
   DEBUG4PIN_SETUP;
-  DEBUG5PIN_SETUP;
   // setup the power stuff 
-  V5_SETUP;
-  V24_SETUP;
-  powerStateUpdate(false, false);
+  V5BUS_SETUP;
+  V24BUS_SETUP;
+  V5POGO_SETUP;
+  V24POGO_SETUP;
+  // write states, all off until told otherwise, 
+  powerStateUpdate(false, false, false, false);
   // osap
   vpUSBSer.begin();
   vbUCBusHead.begin();
@@ -258,28 +130,7 @@ uint8_t moveBuffer[128];
 void loop() {
   // main recursive osap loop:
   osap.loop();
-  // check for axl broadcast data, 
-  // if(precalculatedMoveEP.clearToWrite()){
-  //   moveDataLen = axl_netLoop(moveBuffer);
-  //   if(moveDataLen){
-  //     precalculatedMoveEP.write(moveBuffer, moveDataLen);
-  //   }
-  // }
-  // run 10Hz endpoint update:
-  if(millis() > lastUpdate + epUpdateInterval){
-    lastUpdate = millis();
-    DEBUG5PIN_TOGGLE;
-    // updateStatesEP();
-  }
-  // if(haltLightOnTime + 250 < millis()){
-  //   ERRLIGHT_OFF;
-  // }
 } // end loop 
-
-// noop for actuator-free-zone 
-void axl_onPositionDelta(uint8_t axis, float delta){}
-void axl_limitSetup(void){}
-boolean axl_checkLimit(void){ return true; }
 
 // runs on period defined by timer_a setup: 
 volatile uint32_t timeTick = 0;
@@ -289,16 +140,12 @@ void TC0_Handler(void){
   // runs at period established above... 
   TC0->COUNT32.INTFLAG.bit.MC0 = 1;
   TC0->COUNT32.INTFLAG.bit.MC1 = 1;
-  DEBUG1PIN_HI;
   // do bus action first: want downstream clocks to be deterministic-ish
   vbUCBusHead.timerISR();
-  // do axl integration, 
-  // axl_integrator();
   // do blinking, lol
   timeBlink ++;
   if(timeBlink > 500){
-    CLKLIGHT_TOGGLE;
+    DEBUG1PIN_TOGGLE;
     timeBlink = 0; 
   }
-  DEBUG1PIN_LO;
 }

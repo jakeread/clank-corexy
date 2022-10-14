@@ -10,3 +10,21 @@
 [submodule "firmware/pogo-power-take-off/src/osape_arduino"]
 	path = firmware/pogo-power-take-off/src/osape_arduino
 	url = https://github.com/jakeread/osape_arduino.git
+[submodule "firmware/cxy-axl-stepper/src/osape"]
+	path = firmware/cxy-axl-stepper/src/osape
+	url = https://github.com/jakeread/osape.git
+	branch = clank-corexy
+[submodule "firmware/cxy-axl-stepper/src/osape_ucbus"]
+	path = firmware/cxy-axl-stepper/src/osape_ucbus
+	url = https://github.com/jakeread/osape_ucbus.git
+	branch = clank-corexy
+[submodule "firmware/cxy-axl-stepper/src/osape_arduino"]
+	path = firmware/cxy-axl-stepper/src/osape_arduino
+	url = https://github.com/jakeread/osape_arduino.git
+	branch = clank-corexy
+[submodule "firmware/cxy-axl-stepper/src/axl"]
+	path = firmware/cxy-axl-stepper/src/axl
+	url = https://github.com/jakeread/axl.git
+[submodule "firmware/cxy-axl-stepper/src/utils_samd51"]
+	path = firmware/cxy-axl-stepper/src/utils_samd51
+	url = https://github.com/jakeread/utils_samd51.git
