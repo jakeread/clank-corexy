@@ -1,0 +1,12 @@
+[submodule "firmware/pogo-power-take-off/src/osape"]
+	path = firmware/pogo-power-take-off/src/osape
+	url = https://github.com/jakeread/osape.git
+[submodule "firmware/pogo-power-take-off/src/osape_ucbus"]
+	path = firmware/pogo-power-take-off/src/osape_ucbus
+	url = https://github.com/jakeread/osape_ucbus.git
+[submodule "firmware/pogo-power-take-off/src/utils_samd51"]
+	path = firmware/pogo-power-take-off/src/utils_samd51
+	url = https://github.com/jakeread/utils_samd51.git
+[submodule "firmware/pogo-power-take-off/src/osape_arduino"]
+	path = firmware/pogo-power-take-off/src/osape_arduino
+	url = https://github.com/jakeread/osape_arduino.git

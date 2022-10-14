@@ -1,0 +1,55 @@
+// circuit specific indicators: modular-motion-head 2021-08-26 
+
+#define PIN_BM(pin) (uint32_t)(1 << pin)
+#define PIN_HI(port, pin) PORT->Group[port].OUTSET.reg = PIN_BM(pin) 
+#define PIN_LO(port, pin) PORT->Group[port].OUTCLR.reg = PIN_BM(pin) 
+#define PIN_TGL(port, pin) PORT->Group[port].OUTTGL.reg = PIN_BM(pin)
+#define PIN_SETUP_OUTPUT(port, pin) PORT->Group[port].DIRSET.reg = PIN_BM(pin) 
+
+#define CLKLIGHT_ON PIN_LO(0, 27) 
+#define CLKLIGHT_OFF PIN_HI(0, 27)
+#define CLKLIGHT_TOGGLE PIN_TGL(0, 27)
+#define CLKLIGHT_SETUP PIN_SETUP_OUTPUT(0, 27); CLKLIGHT_OFF
+
+#define ERRLIGHT_ON PIN_LO(1, 8)
+#define ERRLIGHT_OFF PIN_HI(1, 8)
+#define ERRLIGHT_TOGGLE PIN_TGL(1, 8)
+#define ERRLIGHT_SETUP PIN_SETUP_OUTPUT(1, 8); ERRLIGHT_OFF
+
+// breakout debugs are pin-to-gnd, 
+// PA13, PA12, PB15, PB14, PA04 
+
+#define DEBUG1PIN_ON PIN_LO(0, 13)
+#define DEBUG1PIN_OFF PIN_HI(0, 13)
+#define DEBUG1PIN_HI PIN_HI(0, 13)
+#define DEBUG1PIN_LO PIN_LO(0, 13)
+#define DEBUG1PIN_TOGGLE PIN_TGL(0, 13)
+#define DEBUG1PIN_SETUP PIN_SETUP_OUTPUT(0, 13); PIN_HI(0, 13)
+
+#define DEBUG2PIN_ON PIN_LO(0, 12)
+#define DEBUG2PIN_OFF PIN_HI(0, 12)
+#define DEBUG2PIN_HI PIN_HI(0, 12)
+#define DEBUG2PIN_LO PIN_LO(0, 12)
+#define DEBUG2PIN_TOGGLE PIN_TGL(0, 12)
+#define DEBUG2PIN_SETUP PIN_SETUP_OUTPUT(0, 12); PIN_HI(0, 12)
+
+#define DEBUG3PIN_ON PIN_LO(1, 15)
+#define DEBUG3PIN_OFF PIN_HI(1, 15)
+#define DEBUG3PIN_HI PIN_HI(1, 15)
+#define DEBUG3PIN_LO PIN_LO(1, 15)
+#define DEBUG3PIN_TOGGLE PIN_TGL(1, 15)
+#define DEBUG3PIN_SETUP PIN_SETUP_OUTPUT(1, 15); PIN_HI(1, 15)
+
+#define DEBUG4PIN_ON PIN_LO(1, 14)
+#define DEBUG4PIN_OFF PIN_HI(1, 14)
+#define DEBUG4PIN_HI PIN_HI(1, 14)
+#define DEBUG4PIN_LO PIN_LO(1, 14)
+#define DEBUG4PIN_TOGGLE PIN_TGL(1, 14)
+#define DEBUG4PIN_SETUP PIN_SETUP_OUTPUT(1, 14); PIN_HI(1, 14)
+
+#define DEBUG5PIN_ON PIN_LO(0, 4)
+#define DEBUG5PIN_OFF PIN_HI(0, 4)
+#define DEBUG5PIN_HI PIN_HI(0, 4)
+#define DEBUG5PIN_LO PIN_LO(0, 4)
+#define DEBUG5PIN_TOGGLE PIN_TGL(0, 4)
+#define DEBUG5PIN_SETUP PIN_SETUP_OUTPUT(0, 4); PIN_HI(0, 4)
