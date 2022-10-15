@@ -50,8 +50,8 @@ let wscVPort = osap.vPort("wscVPort")
 // -------------------------------------------------------- Clank! Object
 
 let clank = new AXLCore(osap, {       // settings object 
-  bounds: [150, 150, 15],
-  accelLimits: [1500, 1500, 750],
+  bounds: [245, 170, 15],
+  accelLimits: [750, 750, 500],
   velocityLimits: [200, 200, 80],
   queueStartDelay: 500,
   junctionDeviation: 0.1,
@@ -211,7 +211,7 @@ zZeroBtn.onClick(async () => {
 // ---------------------------------------------- Stat Printout 
 
 let netStatPrint = new TextBlock({
-  xPlace: colOneX, yPlace: colOneY += 80,
+  xPlace: colOneX, yPlace: colOneY += 70,
   width: colOneWidth, height: 70,
   defaultText: `netStats`
 }, true)
@@ -221,16 +221,70 @@ clank.onNetInfoUpdate = (info) => {
   netStatPrint.setHTML(`filtered RTT: \t${info.rtt.toFixed(2)}<br>min RTT: \t\t\t${info.rttMin}<br>max RTT: \t\t\t${info.rttMax}`)
 }
 
+// -------------------------------------------------------- Spindle Toggling
+
+let spindleOnBtn = new Button({
+  xPlace: colOneX, yPlace: colOneY += 90,
+  width: colOneWidth, height: 40,
+  defaultText: "spindle on"
+})
+
+spindleOnBtn.onClick(async () => {
+  try{
+    await powerSwitchVM.setPowerStates(true, true, true, true)
+  } catch (err) {
+    console.error(err)
+    spindleOnBtn.bad("err, see console...")  
+  }
+})
+
+let spindleOffBtn = new Button({
+  xPlace: colOneX, yPlace: colOneY += 50,
+  width: colOneWidth, height: 40,
+  defaultText: "spindle off"
+})
+
+spindleOffBtn.onClick(async () => {
+  try{
+    await powerSwitchVM.setPowerStates(true, true, false, false)
+  } catch (err) {
+    console.error(err)
+    spindleOffBtn.bad("err, see console...")  
+  }
+})
+
+clank.onSegmentComplete = (seg) => {
+  console.warn('done seg', seg)
+}
+
 // -------------------------------------------------------- UI Column Two 
 
 let colTwoX = colOneWidth + 20
 
 // let's get a pad setup for all the gerber business, 
+// I'm still not sure how to deal with various end-effectors, probably actually 
+// dataflow *is* the answer for those types of things, pipe switching on tool state
+
+let stopGapSpindle = {
+  setDuty: async function (duty) {
+    try {
+      if (duty > 0.0) {
+        await powerSwitchVM.setPowerStates(true, true, true, true)
+        await TIME.delay(500)
+      } else {
+        await powerSwitchVM.setPowerStates(true, true, false, false)
+        await TIME.delay(100)
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+}
 
 let bed = new MachineBed({
   xPlace: colTwoX, yPlace: 10,
-  renderWidth: 700
-}, clank)
+  renderWidth: 800
+}, clank, stopGapSpindle)
 
 // 2nd col UI 
 let colTwoWidth = bed.getRenderDims()[2]
