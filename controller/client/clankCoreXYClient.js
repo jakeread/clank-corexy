@@ -430,6 +430,7 @@ jQuery.get('/startLocal/osapSerialBridge.js', (res) => {
       // opens, 
       ws.onopen = (evt) => {
         wscVPortStatus = "open"
+        console.log('ws reports open-ness')
         // implement rx
         ws.onmessage = (msg) => {
           let uint = new Uint8Array(msg.data)

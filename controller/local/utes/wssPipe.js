@@ -59,6 +59,7 @@ let startWSS = () => {
     })
     // each new connection gets a new socket,
     wss.on('connection', (ws) => {
+      console.log('made a websocket connection...')
       resolve(ws)
     })
     wss.on('error', (err) => {
