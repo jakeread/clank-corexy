@@ -42,13 +42,16 @@ Object.keys(ifaces).forEach(function(ifname) {
       // console.log('serving at: ' ifname + ':' + alias + iface.address + `:${port}`);
     } else {
       console.log('ip: ' /*ifname + ':' + alias,*/ + iface.address) //+ `:${port}`);
-      wsAddr = iface.address
+      // pick the local-hosty one, to send upstream... 
+      if(iface.address.includes('127')) wsAddr = iface.address
       // this interface has only one ipv4 adress
       //console.log(ifname, iface.address);
     }
     ++alias;
   });
 });
+
+if(wsAddr == '') throw new Error('no appropriate wsAddr found...?')
 
 let wsPort = 4040
 let errs = 0
