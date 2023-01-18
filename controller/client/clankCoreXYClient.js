@@ -59,7 +59,7 @@ let clank = new AXLCore(osap, {       // settings object
   {
     name: "rt_axl-stepper_rl",
     axis: 0,
-    invert: true,
+    invert: false,
     microstep: 4,
     spu: 25,
     cscale: 0.3
@@ -67,7 +67,7 @@ let clank = new AXLCore(osap, {       // settings object
   {
     name: "rt_axl-stepper_rr",
     axis: 1,
-    invert: true,
+    invert: false,
     microstep: 4,
     spu: 25,
     cscale: 0.3
